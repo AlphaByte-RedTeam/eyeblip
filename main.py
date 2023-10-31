@@ -7,9 +7,9 @@ import numpy as np
 import requests
 import streamlit as st
 from camera_input_live import camera_input_live
-from dotenv import load_dotenv
 
-engine = pyttsx3.init(engine="espeak")
+engine = pyttsx3.init()
+engine.setProperty('rate', 150)
 
 
 def speak(text):
@@ -42,7 +42,7 @@ def save_image(image):
     return filename
 
 
-load_dotenv(os.path.join(os.path.dirname(os.path.curdir), ".env"))
+# load_dotenv(os.path.join(os.path.dirname(os.path.curdir), ".env"))
 
 # Set up the Hugging Face token here
 API_URL = (
@@ -78,8 +78,8 @@ while True:
         response = query(saved_frame)
         caption = response[0]["generated_text"]
 
-        speak(caption)
         st.text(caption)
+        speak(caption)
 
         # TODO: Enable this later after experiment complete
         # os.remove(saved_frame)
