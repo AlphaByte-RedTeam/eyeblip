@@ -52,6 +52,7 @@ image = camera_input_live(
     key="eyeblip",
     start_label="Start",
     stop_label="Pause",
+    debounce=5000,
 )
 
 if image is not None:
