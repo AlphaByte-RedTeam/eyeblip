@@ -19,6 +19,20 @@ def query(frame):
     return response.json()
 
 
+def save_image(image):
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    filename = f"frame_{timestamp}.jpg"
+
+    image_bin = image.getvalue()
+    image_np = cv2.imdecode(
+        np.frombuffer(image_bin, np.uint8),
+        cv2.IMREAD_COLOR,
+    )
+    cv2.imwrite(filename, image_np)
+
+    return filename
+
+
 load_dotenv(os.path.join(os.path.dirname(os.path.curdir), ".env"))
 
 # Set up the Hugging Face token here
@@ -40,20 +54,15 @@ if image is not None:
 last_capture_time = time.time()
 filename = ""
 
+
 while True:
     current_time = time.time()
     time_diff = current_time - last_capture_time
 
-    if time_diff >= 5:
-        timestamp = time.strftime("%Y%m%d-%H%M%S")
-        filename = f"frame_{timestamp}.jpg"
+    time.sleep(5)
 
-        image_bin = image.getvalue()
-        image_np = cv2.imdecode(
-            np.frombuffer(image_bin, np.uint8),
-            cv2.IMREAD_COLOR,
-        )
-        cv2.imwrite(filename, image_np)
+    if time_diff >= 5:
+        filename = save_image(image)
 
         last_capture_time = current_time
         saved_frame = filename
