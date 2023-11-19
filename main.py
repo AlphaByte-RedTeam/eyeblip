@@ -45,7 +45,7 @@ load_dotenv(os.path.join(os.path.dirname(os.path.curdir), ".env"))
 API_URL = (
     "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
 )
-API_TOKEN = os.environ.get("HUGGINGFACE_TOKEN")
+API_TOKEN = st.secrets["HUGGINGFACE_TOKEN"]
 headers = {"Authorization": "Bearer {}".format(API_TOKEN)}
 
 image = camera_input_live(
