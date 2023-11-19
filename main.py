@@ -1,8 +1,11 @@
 import os
+import cv2
 import time
+import numpy as np
 import requests
 import streamlit as st
 from dotenv import load_dotenv
+from io import BytesIO
 from camera_input_live import camera_input_live
 
 
@@ -26,30 +29,29 @@ API_URL = (
 API_TOKEN = os.environ.get("HUGGINGFACE_TOKEN")
 headers = {"Authorization": "Bearer {}".format(API_TOKEN)}
 
-
-last_capture_time = time.time()
-filename = ""
-
 image = camera_input_live(
     key="eyeblip",
     start_label="Start",
     stop_label="Pause",
 )
 
-st.image(image=image)
+last_capture_time = time.time()
+filename = ""
 
-current_time = time.time()
-time_diff = current_time - last_capture_time
+while True:
+    current_time = time.time()
+    time_diff = current_time - last_capture_time
 
-if image is not None:
     if time_diff >= 5:
         timestamp = time.strftime("%Y%m%d-%H%M%S")
         filename = f"frame_{timestamp}.jpg"
 
-        image_binary = image.getvalue()
-
-        with open(filename, "wb") as f:
-            f.write(image_binary)
+        image_bin = image.getvalue()
+        image_np = cv2.imdecode(
+            np.frombuffer(image_bin, np.uint8),
+            cv2.IMREAD_COLOR,
+        )
+        cv2.imwrite(filename, image_np)
 
         last_capture_time = current_time
         saved_frame = filename
@@ -62,3 +64,5 @@ if image is not None:
 
         # TODO: Enable this later after experiment complete
         # os.remove(saved_frame)
+
+st.image(image=image)
