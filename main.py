@@ -1,12 +1,11 @@
 import os
-import cv2
 import time
+import cv2
 import numpy as np
 import requests
 import streamlit as st
-from dotenv import load_dotenv
-from io import BytesIO
 from camera_input_live import camera_input_live
+from dotenv import load_dotenv
 
 
 def speak(text):
@@ -34,6 +33,9 @@ image = camera_input_live(
     start_label="Start",
     stop_label="Pause",
 )
+
+if image is not None:
+    st.image(image)
 
 last_capture_time = time.time()
 filename = ""
@@ -64,5 +66,3 @@ while True:
 
         # TODO: Enable this later after experiment complete
         # os.remove(saved_frame)
-
-st.image(image=image)
