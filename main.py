@@ -2,16 +2,20 @@ import os
 import time
 
 import cv2
+import pyttsx3
 import numpy as np
 import requests
 import streamlit as st
 from camera_input_live import camera_input_live
 from dotenv import load_dotenv
 
+engine = pyttsx3.init(engine="espeak")
+
 
 def speak(text):
-    os.system(f'say "{text}"')
-
+    # os.system(f'say "{text}"')
+    engine.say(text)
+    engine.runAndWait()
 
 def query(frame):
     with open(frame, "rb") as f:
@@ -20,7 +24,6 @@ def query(frame):
         API_URL,
         headers=headers,
         data=data,
-        timeout=10,
     )
     return response.json()
 
