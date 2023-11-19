@@ -59,8 +59,6 @@ while True:
     current_time = time.time()
     time_diff = current_time - last_capture_time
 
-    time.sleep(5)
-
     if time_diff >= 5:
         filename = save_image(image)
 
