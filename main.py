@@ -1,5 +1,6 @@
 import os
 import time
+
 import cv2
 import numpy as np
 import requests
@@ -15,7 +16,12 @@ def speak(text):
 def query(frame):
     with open(frame, "rb") as f:
         data = f.read()
-    response = requests.post(API_URL, headers=headers, data=data)
+    response = requests.post(
+        API_URL,
+        headers=headers,
+        data=data,
+        timeout=10,
+    )
     return response.json()
 
 
